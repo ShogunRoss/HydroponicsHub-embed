@@ -4,7 +4,7 @@
 #include <WiFiMulti.h>
 
 //NEED TO CALCULATE: miliseconds = minutes * 60 * 1000
-#define POST_DATA_PERIOD 5000
+#define POST_DATA_PERIOD 10000
 
 // The maximum number of sensors
 #define SENSORCOUNT 3
@@ -19,9 +19,10 @@ const char *password1 = "biomechlab2019";
 const char *ssid2 = "Wifi Long Room";
 const char *password2 = "0982407168";
 
-String hostUrl = "http://shogunross:3000/hydro-hub"; // TODO: Change this url after production
+String hostUrl = "http://hydroponics-hub.herokuapp.com/hydro-hub";
 String secretKey = "6MfzwnDGNNmcHat64fb4kq1qHxhvoGyU";
 String requestBody;
+String quote = "\\\"";
 
 float temperature, pH, nutrient;
 
@@ -103,7 +104,7 @@ void postData()
 		pH = randomData(6, 7, 1);
 		temperature = randomData(25, 30, 1);
 
-		requestBody = "{\"query\":\"mutation{updateSensor(sensorInput:{secretKey:\"" + secretKey + "\",temperature:" + temperature + ",pH:" + pH + ",nutrient:" + nutrient + "){time}\"}";
+		requestBody = "{\"query\":\"mutation{updateSensor(sensorInput:{secretKey:" + quote + secretKey + quote + ",temperature:" + temperature + ",pH:" + pH + ",nutrient:" + nutrient + "}){time}}\"}";
 		Serial.print(requestBody);
 
 		int httpResponseCode = http.POST(requestBody); //Send the actual POST request
